@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Foodie - Online Food Ordering</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            background: #ff4d4d;
+            padding: 18px 6%;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            margin-right: auto;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .username {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(
+                135deg,
+                #fff5f5,
+                #ffffff
+            );
+
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: #ff4d4d;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: auto;
+            display: flex;
+            background: white;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* CATEGORIES */
+
+        .categories {
+            padding: 45px 6%;
+            background: white;
+            text-align: center;
+        }
+
+        .categories h2 {
+            margin-bottom: 25px;
+        }
+
+        .category-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .category {
+            background: #fff0f0;
+            border: 1px solid #ffcccc;
+            padding: 12px 22px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #ff4d4d;
+        }
+
+        .category:hover {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        /* MENU */
+
+        .menu {
+            padding: 50px 6%;
+        }
+
+        .menu-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .menu-title h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .menu-title p {
+            color: #777;
+        }
+
+        .food-container {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .food-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .food-content {
+            padding: 20px;
+        }
+
+        .food-content h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .food-content p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            color: #ff4d4d !important;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .cart-btn {
+            width: 100%;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .cart-btn:hover {
+            background: #e63c3c;
+        }
+
+        .no-food {
+            text-align: center;
+            color: #777;
+            grid-column: 1 / -1;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        footer h3 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #bbb;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 15px;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                width: 100%;
+                text-align: center;
+            }
+
+            nav a {
+                font-size: 14px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .menu {
+                padding: 35px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="logo">
+        🍔 Foodie
+    </div>
+
+
+    <a href="{% url 'home' %}">
+        Home
+    </a>
+
+
+    <a href="#menu">
+        Menu
+    </a>
+
+
+    {% if user.is_authenticated %}
+
+        <span class="username">
+            Hi, {{ user.username }}
+        </span>
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'login' %}">
+            Login
+        </a>
+
+        <a href="{% url 'register' %}">
+            Register
+        </a>
+
+    {% endif %}
+
+
+    <a href="{% url 'cart' %}">
+        🛒 Cart
+    </a>
+
+   <a href="{% url 'my_orders' %}">
+    My Orders
+</a> 
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>
+        Delicious Food,
+        <span>Delivered Fast!</span> 🍕
+    </h1>
+
+    <p>
+        Discover delicious food and order your favourites from Foodie.
+    </p>
+
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for food..."
+        >
+
+        <button
+            type="button"
+            onclick="searchFood()">
+            Search
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- CATEGORIES -->
+
+<section class="categories">
+
+    <h2>
+        Explore Categories
+    </h2>
+
+
+    <div class="category-container">
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('all')">
+
+            🍽️ All
+
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('Pizza')">
+
+            🍕 Pizza
+
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('Burger')">
+
+            🍔 Burgers
+
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('Chicken')">
+
+            🍗 Chicken
+
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('Chinese')">
+
+            🍜 Chinese
+
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('Dessert')">
+
+            🍰 Desserts
+
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            onclick="filterCategory('Drinks')">
+
+            🥤 Drinks
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- MENU -->
+
+<section
+    class="menu"
+    id="menu">
+
+
+    <div class="menu-title">
+
+        <h2>
+            🍽️ Popular Food
+        </h2>
+
+        <p>
+            Choose your favourite food and order now.
+        </p>
+
+    </div>
+
+
+    <div
+        class="food-container"
+        id="foodContainer">
+
+
+        {% for food in foods %}
+
+
+        <div
+            class="food-card"
+            data-name="{{ food.name|lower }}"
+            data-category="{{ food.category|default:''|lower }}"
+        >
+
+
+            {% if food.image %}
+
+                <img
+                    src="{{ food.image.url }}"
+                    alt="{{ food.name }}"
+                >
+
+            {% else %}
+
+                <div style="
+                    height:200px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:#eee;
+                    font-size:50px;
+                ">
+
+                    🍽️
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="food-content">
+
+
+                <h3>
+                    {{ food.name }}
+                </h3>
+
+
+                <p>
+                    {{ food.description }}
+                </p>
+
+
+                <p class="price">
+                    ₹{{ food.price }}
+                </p>
+
+
+                <form
+                    method="POST"
+                    action="{% url 'add_to_cart' food.id %}"
+                >
+
+                    {% csrf_token %}
+
+
+                    <button
+                        type="submit"
+                        class="cart-btn"
+                    >
+
+                        Add to Cart 🛒
+
+                    </button>
+
+                </form>
+
+
+            </div>
+
+        </div>
+
+
+        {% empty %}
+
+
+            <p class="no-food">
+                No food available right now.
+            </p>
+
+
+        {% endfor %}
+
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h3>
+        🍔 Foodie
+    </h3>
+
+
+    <p>
+        Delicious food delivered to your doorstep.
+    </p>
+
+
+    <p style="margin-top:10px;">
+
+        © 2026 Foodie.
+        All rights reserved.
+
+    </p>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+
+function searchFood() {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const searchText =
+        searchInput.value
+        .toLowerCase()
+        .trim();
+
+    const foodCards =
+        document.querySelectorAll(".food-card");
+
+
+    foodCards.forEach(function(card) {
+
+        const foodName =
+            card.getAttribute("data-name") || "";
+
+
+        if (
+            searchText === "" ||
+            foodName.includes(searchText)
+        ) {
+
+            card.style.display = "";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "keyup",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                searchFood();
+
+            }
+
+        }
+    );
+
+
+function filterCategory(category) {
+
+    const foodCards =
+        document.querySelectorAll(".food-card");
+
+
+    const selectedCategory =
+        category
+        .trim()
+        .toLowerCase();
+
+
+    foodCards.forEach(function(card) {
+
+        const foodCategory =
+            (
+                card.getAttribute("data-category")
+                || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (
+            selectedCategory === "all" ||
+            foodCategory === selectedCategory
+        ) {
+
+            card.style.display = "";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+
+    document
+        .getElementById("menu")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

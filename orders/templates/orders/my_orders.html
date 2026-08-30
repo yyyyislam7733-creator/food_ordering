@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders - Foodie</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            color: #222;
+        }
+
+
+        /* NAVBAR */
+
+        nav {
+            background: #ff4d4d;
+            padding: 18px 6%;
+            display: flex;
+            align-items: center;
+        }
+
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+        }
+
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: auto;
+        }
+
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+
+        /* ORDER CARD */
+
+        .order {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        }
+
+
+        .order h3 {
+            color: #ff4d4d;
+            margin-top: 0;
+            font-size: 23px;
+        }
+
+
+        .order p {
+            margin: 10px 0;
+        }
+
+
+        .order-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+
+        .order-section h4 {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+
+        .price {
+            color: #ff4d4d;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+
+        .confirmed {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+
+        .preparing {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+
+        .delivery {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+
+        .delivered {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+
+        .cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+
+        /* EMPTY */
+
+        .empty {
+            text-align: center;
+            color: #777;
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+
+            nav {
+                padding: 15px;
+            }
+
+
+            nav a {
+                margin-left: 12px;
+                font-size: 14px;
+            }
+
+
+            .order {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="logo">
+        🍔 Foodie
+    </div>
+
+
+    <a href="{% url 'home' %}">
+        Home
+    </a>
+
+
+    <a href="{% url 'cart' %}">
+        🛒 Cart
+    </a>
+
+
+    <a href="{% url 'my_orders' %}">
+        My Orders
+    </a>
+
+</nav>
+
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <h1>
+        📦 My Orders
+    </h1>
+
+
+
+    {% if orders %}
+
+
+        {% for order in orders %}
+
+
+            <div class="order">
+
+
+                <!-- FOOD -->
+
+                <h3>
+                    🍽️ {{ order.food.name }}
+                </h3>
+
+
+                <p>
+                    <strong>Quantity:</strong>
+                    {{ order.quantity }}
+                </p>
+
+
+                <p class="price">
+                    ₹{{ order.total_price }}
+                </p>
+
+
+
+                <!-- CUSTOMER DETAILS -->
+
+                <div class="order-section">
+
+                    <h4>
+                        👤 Customer Details
+                    </h4>
+
+
+                    <p>
+                        <strong>Name:</strong>
+                        {{ order.customer_name }}
+                    </p>
+
+
+                    <p>
+                        <strong>Phone:</strong>
+                        {{ order.phone }}
+                    </p>
+
+
+                    <p>
+                        <strong>Delivery Address:</strong>
+                        {{ order.delivery_address }}
+                    </p>
+
+                </div>
+
+
+
+                <!-- ORDER DATE -->
+
+                <div class="order-section">
+
+                    <h4>
+                        🕒 Order Information
+                    </h4>
+
+
+                    <p>
+                        <strong>Ordered:</strong>
+                        {{ order.ordered_at|date:"d M Y, h:i A" }}
+                    </p>
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="order-section">
+
+                    <h4>
+                        📦 Order Status
+                    </h4>
+
+
+                    {% if order.status == "Pending" %}
+
+                        <span class="status pending">
+                            🟡 Pending
+                        </span>
+
+
+                    {% elif order.status == "Confirmed" %}
+
+                        <span class="status confirmed">
+                            🔵 Confirmed
+                        </span>
+
+
+                    {% elif order.status == "Preparing" %}
+
+                        <span class="status preparing">
+                            🟠 Preparing
+                        </span>
+
+
+                    {% elif order.status == "Out for Delivery" %}
+
+                        <span class="status delivery">
+                            🚴 Out for Delivery
+                        </span>
+
+
+                    {% elif order.status == "Delivered" %}
+
+                        <span class="status delivered">
+                            🟢 Delivered
+                        </span>
+
+
+                    {% elif order.status == "Cancelled" %}
+
+                        <span class="status cancelled">
+                            🔴 Cancelled
+                        </span>
+
+
+                    {% else %}
+
+                        <span class="status">
+                            {{ order.status }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            <h2>
+                📦 No Orders Yet
+            </h2>
+
+            <p>
+                Your placed orders will appear here.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>
